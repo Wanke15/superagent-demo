@@ -86,6 +86,12 @@ class AddCliTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("usage", result.stderr.lower())
 
+    def test_out_of_range_sum_is_rejected(self):
+        result = run_cli("1e999999999", "1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("cannot compute the sum", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
     def test_help_flag(self):
         result = run_cli("--help")
         self.assertEqual(result.returncode, 0, msg=result.stderr)

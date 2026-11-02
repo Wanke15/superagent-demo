@@ -8,7 +8,7 @@ prints ``0.3`` instead of ``0.30000000000000004``).
 
 import argparse
 import sys
-from decimal import Decimal, InvalidOperation, localcontext
+from decimal import Decimal, DecimalException, InvalidOperation, localcontext
 
 
 def parse_number(raw):
@@ -55,7 +55,12 @@ def main(argv=None):
     parser.add_argument("b", type=parse_number, metavar="B", help="second number")
     args = parser.parse_args(argv)
 
-    print(format_number(add(args.a, args.b)))
+    try:
+        result = add(args.a, args.b)
+    except DecimalException:
+        parser.error("cannot compute the sum: the result is out of range")
+
+    print(format_number(result))
     return 0
 
 
