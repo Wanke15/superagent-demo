@@ -64,6 +64,18 @@ class AddCliTests(unittest.TestCase):
             ["12345678901234567890", "1"], "12345678901234567891"
         )
 
+    def test_beyond_default_decimal_precision_are_exact(self):
+        self.assert_cli_output(
+            ["123456789012345678901234567890", "1"],
+            "123456789012345678901234567891",
+        )
+
+    def test_large_integer_plus_decimal_is_exact(self):
+        self.assert_cli_output(
+            ["1000000000000000000000000000000", "0.5"],
+            "1000000000000000000000000000000.5",
+        )
+
     def test_invalid_number_is_rejected(self):
         result = run_cli("abc", "1")
         self.assertNotEqual(result.returncode, 0)
